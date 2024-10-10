@@ -93,10 +93,7 @@ namespace WpfItemsControlSample2.Models
 
         public int Count => bodies.Count;
 
-        public BodyFigureSet()
-        {
-            bodies.CollectionChanged += (_, e) => CollectionChanged?.Invoke(this, e);
-        }
+        public BodyFigureSet() => bodies.CollectionChanged += (_, e) => CollectionChanged?.Invoke(this, e);
 
         public void Add(BodyFigure body) => bodies.Add(body);
         public void Remove(BodyFigure body) => bodies.Remove(body);
