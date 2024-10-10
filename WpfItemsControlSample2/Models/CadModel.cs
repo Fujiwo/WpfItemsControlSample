@@ -139,14 +139,18 @@ namespace WpfItemsControlSample2.Models
 
         void AddRandomFigure()
         {
-            bodyFigureSet.Where(bodyFigure => bodyFigure.Position.X < 0 || bodyFigure.Position.X > MaximumSize.Width ||
-                                              bodyFigure.Position.Y < 0 || bodyFigure.Position.Y > MaximumSize.Height)
-                         .ToList()
-                         .ForEach(bodyFigureSet.Remove);
-
+            RemoveOutOfRangeBodyFigures();
             if (bodyFigureSet.Count < maximumCount)
                 Add(CreateRandomBodyFigure(MaximumSize));
             bodyFigureSet.Move();
+
+            void RemoveOutOfRangeBodyFigures()
+            {
+                bodyFigureSet.Where(bodyFigure => bodyFigure.Position.X < 0 || bodyFigure.Position.X > MaximumSize.Width ||
+                                                  bodyFigure.Position.Y < 0 || bodyFigure.Position.Y > MaximumSize.Height)
+                             .ToList()
+                             .ForEach(bodyFigureSet.Remove);
+            }
         }
 
         static readonly Random random = new();
