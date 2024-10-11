@@ -19,6 +19,8 @@ namespace WpfItemsControlSample2.Models
         public static double Distance(this Point @this, Point point) => @this.Minus(point).AbsoluteValue();
         public static Point Sum(this IEnumerable<Point> points) => points.Count() == 0 ? new Point() : points.Aggregate((sum, point) => sum.Plus(point));
         public static double Square(this double @this) => @this * @this;
+        public static bool IsInRange(this Point @this, Size size) => @this.X.IsInRange(0.0, size.Width) && @this.Y.IsInRange(0.0, size.Height);
+        public static bool IsInRange(this double @this, double minimum, double maximum) => @this >= minimum && @this <= maximum;
     }
 
     abstract class Body
@@ -145,12 +147,9 @@ namespace WpfItemsControlSample2.Models
             bodyFigureSet.Move();
 
             void RemoveOutOfRangeBodyFigures()
-            {
-                bodyFigureSet.Where(bodyFigure => bodyFigure.Position.X < 0 || bodyFigure.Position.X > MaximumSize.Width ||
-                                                  bodyFigure.Position.Y < 0 || bodyFigure.Position.Y > MaximumSize.Height)
-                             .ToList()
-                             .ForEach(bodyFigureSet.Remove);
-            }
+                => bodyFigureSet.Where(bodyFigure => !bodyFigure.Position.IsInRange(MaximumSize))
+                                .ToList()
+                                .ForEach(bodyFigureSet.Remove);
         }
 
         static readonly Random random = new();
